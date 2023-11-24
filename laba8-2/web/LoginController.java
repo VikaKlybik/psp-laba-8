@@ -44,11 +44,13 @@ public class LoginController extends HttpServlet {
 
 		try {
 			if (loginDao.validate(loginBean)) {
+				HttpSession session = request.getSession();
+				session.setAttribute("username", username);
 				logger.info("User '{}' logged in successfully", username);
 				response.sendRedirect("list");
 			} else {
 				HttpSession session = request.getSession();
-				// session.setAttribute("user", username);
+				session.setAttribute("username", username);
 				// response.sendRedirect("login.jsp");
 				logger.warn("Login failed for user '{}'", username);
 			}

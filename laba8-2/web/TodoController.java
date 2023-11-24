@@ -71,7 +71,8 @@ public class TodoController extends HttpServlet {
 	private void listTodo(HttpServletRequest request, HttpServletResponse response)
 			throws SQLException, IOException, ServletException {
 		logger.info("Displaying list of todos");
-		List<Todo> listTodo = todoDAO.selectAllTodos();
+		String username = (String) request.getSession().getAttribute("username");
+		List<Todo> listTodo = todoDAO.selectAllTodos(username);
 		request.setAttribute("listTodo", listTodo);
 		RequestDispatcher dispatcher = request.getRequestDispatcher("todo/todo-list.jsp");
 		dispatcher.forward(request, response);
@@ -97,7 +98,7 @@ public class TodoController extends HttpServlet {
 	private void insertTodo(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException {
 		logger.info("Inserting new todo");
 		String title = request.getParameter("title");
-		String username = request.getParameter("username");
+		String username = (String) request.getSession().getAttribute("username");
 		String description = request.getParameter("description");
 		boolean isDone = Boolean.valueOf(request.getParameter("isDone"));
 		Todo newTodo = new Todo(title, username, description, LocalDate.now(), isDone);
@@ -109,7 +110,7 @@ public class TodoController extends HttpServlet {
 		logger.info("Updating todo");
 		int id = Integer.parseInt(request.getParameter("id"));
 		String title = request.getParameter("title");
-		String username = request.getParameter("username");
+		String username = (String) request.getSession().getAttribute("username");
 		String description = request.getParameter("description");
 		LocalDate targetDate = LocalDate.parse(request.getParameter("targetDate"));
 		boolean isDone = Boolean.valueOf(request.getParameter("isDone"));
